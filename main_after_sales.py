@@ -59,14 +59,11 @@ def main():
         st.write(data)
         
     # Button to download data
-    if st.button("Download Data"):
-        data = read_from_google_drive()
-        file_path = "train_problems.xlsx"
-        data.to_excel(file_path, index=False)
-        with open(file_path, "rb") as file:
-            b64_data = base64.b64encode(file.read()).decode()
-            href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{file_path}">Download XLSX</a>'
-            st.markdown(href, unsafe_allow_html=True)
+    st.download_button(
+                    label="Download after_sales file",
+                    data=delivery_file,
+                    file_name='after_sales',
+                    mime='xlsx',)
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
