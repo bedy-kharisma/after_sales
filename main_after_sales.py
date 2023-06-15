@@ -47,7 +47,7 @@ def main():
         train_problems = train_problems.append(new_row, ignore_index=True)
 
         # Write the data to Google Drive
-        write_to_google_drive(train_problems[2:])
+        write_to_google_drive(train_problems[1:])
 
         st.success("Data Gangguan berhasil dimasukkan!")
 
