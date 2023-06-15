@@ -63,12 +63,11 @@ def write_to_google_drive(train_problems):
     # Open the Google Sheet
     sheet = client.open("after_sales").sheet1
 
-    # Clear existing data in the sheet
-    sheet.clear()
-
-    # Convert the dataframe to a list of lists and write to the sheet
+    # Convert the dataframe to a list of lists
     data = train_problems.values.tolist()
-    sheet.append_rows(data)
+
+    # Append the data to the existing values in the sheet
+    sheet.append_rows(data, value_input_option="USER_ENTERED")
 
 if __name__ == "__main__":
     main()
