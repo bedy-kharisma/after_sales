@@ -66,10 +66,10 @@ def main():
         st.success("Train problem added successfully!")
     # Display the train problem data table
     st.write(train_problems)
- sheet_url = st.secrets["private_gsheets_url"]
-                sheet=client.open("database").sheet1
-                sheet.update([database_df.columns.values.tolist()]+database_df.values.tolist())
-                st.info("Total rows :"+str(len(database_df)))       
+ #sheet_url = st.secrets["private_gsheets_url"]
+ #               sheet=client.open("database").sheet1
+ #               sheet.update([database_df.columns.values.tolist()]+database_df.values.tolist())
+ #               st.info("Total rows :"+str(len(database_df)))       
 
 if __name__ == "__main__":
     main()
