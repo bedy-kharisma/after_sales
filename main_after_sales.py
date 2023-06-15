@@ -57,13 +57,19 @@ def main():
     if st.button("Show All Data"):
         data = read_from_google_drive()
         st.write(data)
-        
-    # Button to download data
-    if st.button("Download Data"):
+    st.download_button(
+        label="Download the delivery csv file template",
         data = read_from_google_drive()
-        file_path = "train_problems.xlsx"
-        data.to_excel(file_path, index=False)
-        download_file(file_path, "train_problems.xlsx")
+        file=data.to_excel(file_path, index=False)
+        data=file,
+        file_name='after_sales.xlsx',
+        mime='xlsx',)   
+    # Button to download data
+    #if st.button("Download Data"):
+    #    data = read_from_google_drive()
+    #    file_path = "train_problems.xlsx"
+    #    data.to_excel(file_path, index=False)
+    #    download_file(file_path, "train_problems.xlsx")
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
@@ -106,7 +112,6 @@ def download_file(file_path, file_name):
         data = file.read()
     b64_data = base64.b64encode(data).decode("utf-8")
     href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_data}" download="{file_name}">Download File</a>'
-    st.markdown(href, unsafe_allow_html=True)
-
+    
 if __name__ == "__main__":
     main()
