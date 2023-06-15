@@ -59,11 +59,11 @@ def main():
         st.write(data)
         
     # Button to download data
-    st.download_button(
-                    label="Download after_sales file",
-                    data=read_from_google_drive(),
-                    file_name='after_sales',
-                    mime='xlsx',)
+    if st.button("Download Data"):
+        data = read_from_google_drive()
+        file_path = "train_problems.xlsx"
+        data.to_excel(file_path, index=False)
+        download_file(file_path)
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
