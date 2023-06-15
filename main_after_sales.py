@@ -5,61 +5,61 @@ from oauth2client.service_account import ServiceAccountCredentials
 import base64
 
 def main():
-    st.title("Train Problem Tracker")
-    st.write("Enter the details of train problems")
+    st.title("AFTER SALES PT INKA")
+    st.write("Masukkan data gangguan kereta")
 
     # Create empty dataframe to store the train problem data
     train_problems = pd.DataFrame(columns=[
-        "Trainset", "Date problem's found", "Date problem's closed",
-        "Train Number", "Problem Description", "Problem Solution",
-        "Cause Classification", "Problem Classification",
-        "Component name", "Number of Component"
+        "Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
+        "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
+        "Klasifikasi Penyebab", "Klasifikasi Problem",
+        "Nama Komponen", "Jumlah Komponen"
     ])
 
     # Create input fields for each column
     trainset = st.text_input("Trainset")
-    found_date = st.date_input("Date problem's found")
-    closed_date = st.date_input("Date problem's closed")
-    train_number = st.text_input("Train Number")
-    description = st.text_input("Problem Description")
-    solution = st.text_input("Problem Solution")
-    cause_classification = st.text_input("Cause Classification")
-    problem_classification = st.text_input("Problem Classification")
-    component_name = st.text_input("Component name")
-    num_component = st.number_input("Number of Component", min_value=0)
+    found_date = st.date_input("Tanggal problem ditemukan")
+    closed_date = st.date_input("Tanggal problem terselesaikan")
+    train_number = st.text_input("Nomor Kereta")
+    description = st.text_input("Deskripsi Problem")
+    solution = st.text_input("Solusi Problem")
+    cause_classification = st.selectbox("Klasifikasi Penyebab",("Salah desain","Salah Manufaktur", "Komponen tidak berkualitas", "Salah operasional"))
+    problem_classification = st.text_input("Klasifikasi Problem")
+    component_name = st.text_input("Nama Komponen")
+    num_component = st.number_input("Jumlah Komponen", min_value=0)
 
     # Create a button to submit the data
-    if st.button("Add Train Problem"):
+    if st.button("Masukkan Data Gangguan"):
         # Append the input data as a new row to the dataframe
         new_row = {
             "Trainset": trainset,
-            "Date problem's found": found_date.strftime("%Y-%m-%d"),
-            "Date problem's closed": closed_date.strftime("%Y-%m-%d"),
-            "Train Number": train_number,
-            "Problem Description": description,
-            "Problem Solution": solution,
-            "Cause Classification": cause_classification,
-            "Problem Classification": problem_classification,
-            "Component name": component_name,
-            "Number of Component": num_component
+            "Tanggal problem ditemukan": found_date.strftime("%Y-%m-%d"),
+            "Tanggal problem terselesaikan": closed_date.strftime("%Y-%m-%d"),
+            "Nomor Kereta": train_number,
+            "Deskripsi Problem": description,
+            "Solusi Problem": solution,
+            "Klasifikasi Penyebab": cause_classification,
+            "Klasifikasi Problem": problem_classification,
+            "Nama Komponen": component_name,
+            "Jumlah Komponen": num_component
         }
         train_problems = train_problems.append(new_row, ignore_index=True)
 
         # Write the data to Google Drive
         write_to_google_drive(train_problems)
 
-        st.success("Train problem added successfully!")
+        st.success("Data Gangguan berhasil dimasukkan!")
 
     # Display the train problem data table
     st.write(train_problems)
 
     # Button to show all data
-    if st.button("Show All Data"):
+    if st.button("Tunjukkan semua data"):
         data = read_from_google_drive()
         st.write(data)
 
     # Button to download data
-    st.markdown("[Open the Google Sheet](https://docs.google.com/spreadsheets/d/1QdAmuQleyDMxXROQtccwzrJNkSPMCCDQbCwW8SB8EVc)")
+    st.markdown("[Buka Google Sheet](https://docs.google.com/spreadsheets/d/1QdAmuQleyDMxXROQtccwzrJNkSPMCCDQbCwW8SB8EVc)")
 
 
 def write_to_google_drive(train_problems):
