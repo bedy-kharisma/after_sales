@@ -61,10 +61,12 @@ def main():
     # Button to download data
     if st.button("Download Data"):
         data = read_from_google_drive()
-        csv_data = data.to_csv(index=False)
-        b64_data = base64.b64encode(csv_data.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64_data}" download="train_problems.csv">Download CSV</a>'
-        st.markdown(href, unsafe_allow_html=True)
+        file_path = "train_problems.xlsx"
+        data.to_excel(file_path, index=False)
+        with open(file_path, "rb") as file:
+            b64_data = base64.b64encode(file.read()).decode()
+            href = f'<a href="data:application/octet-stream;base64,{b64_data}" download="{file_path}">Download XLSX</a>'
+            st.markdown(href, unsafe_allow_html=True)
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
@@ -80,8 +82,8 @@ def write_to_google_drive(train_problems):
     # Convert the dataframe to a list of lists
     data = [train_problems.columns.tolist()] + train_problems.values.tolist()
 
-    # Append the data to the existing values in the sheet
-    sheet.append_rows(data, value_input_option="USER_ENTERED")
+    # Append the data to the sheet
+    sheet.append_rows(data)
 
 def read_from_google_drive():
     # Authenticate and create a connection to Google Drive
