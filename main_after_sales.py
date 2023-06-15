@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import base64
 
 def main():
     st.title("Train Problem Tracker")
@@ -57,12 +56,13 @@ def main():
     if st.button("Show All Data"):
         data = read_from_google_drive()
         st.write(data)
-
+        
     # Button to download data
     if st.button("Download Data"):
         data = read_from_google_drive()
+        file_path = "train_problems.xlsx"
         data.to_excel(file_path, index=False)
-        file_name = "train_problems.xlsx"      
+        download_file(file_path)
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
@@ -99,6 +99,16 @@ def read_from_google_drive():
     data = pd.DataFrame(values[1:], columns=values[0])
 
     return data
+
+def download_file(file_path):
+    with open(file_path, "rb") as file:
+        data = file.read()
+    base64_data = base64.b64encode(data).decode("utf-8")
+    file_name = file_path.split("/")[-1]
+    st.markdown(
+        f'<a href="data:application/octet-stream;base64,{base64_data}" download="{file_name}">Download File</a>',
+        unsafe_allow_html=True
+    )
 
 if __name__ == "__main__":
     main()
