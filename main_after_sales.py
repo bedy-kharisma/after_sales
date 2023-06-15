@@ -61,7 +61,7 @@ def main():
     # Button to download data
     st.download_button(
                     label="Download after_sales file",
-                    data=delivery_file,
+                    data=read_from_google_drive(),
                     file_name='after_sales',
                     mime='xlsx',)
 
