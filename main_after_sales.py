@@ -72,15 +72,6 @@ def write_to_google_drive(train_problems):
     # Open the Google Sheet
     sheet = client.open("after_sales").sheet1
 
-    # Get the existing column names from the Google Sheet
-    existing_columns = sheet.row_values(1)
-
-    # Find the mismatched columns
-    mismatched_columns = set(train_problems.columns) - set(existing_columns)
-
-    # Filter out the rows with mismatched column names
-    train_problems = train_problems.drop(columns=mismatched_columns)
-
     # Convert the dataframe to a list of lists
     data = [train_problems.columns.tolist()] + train_problems.values.tolist()
 
