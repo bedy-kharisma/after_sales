@@ -60,7 +60,7 @@ def write_to_google_drive(train_problems):
     client = gspread.authorize(credentials)
 
     # Open the Google Sheet
-    sheet = client.open("Train Problem Tracker").sheet1
+    sheet = client.open("after_sales").sheet1
 
     # Clear existing data in the sheet
     sheet.clear()
