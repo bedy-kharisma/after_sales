@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 def main():
     st.title("Train Problem Tracker")
@@ -32,8 +33,8 @@ def main():
         # Append the input data as a new row to the dataframe
         train_problems = train_problems.append({
             "Trainset": trainset,
-            "Date problem's found": found_date,
-            "Date problem's closed": closed_date,
+            "Date problem's found": found_date.strftime("%Y-%m-%d"),
+            "Date problem's closed": closed_date.strftime("%Y-%m-%d"),
             "Train Number": train_number,
             "Problem Description": description,
             "Problem Solution": solution,
