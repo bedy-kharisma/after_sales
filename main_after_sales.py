@@ -33,6 +33,7 @@ def main():
     if st.button("Masukkan Data Gangguan"):
         # Append the input data as a new row to the dataframe
         new_row = {
+            "Nama Proyek":nama_proyek,
             "Trainset": trainset,
             "Tanggal problem ditemukan": found_date.strftime("%Y-%m-%d"),
             "Tanggal problem terselesaikan": closed_date.strftime("%Y-%m-%d"),
