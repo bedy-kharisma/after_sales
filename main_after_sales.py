@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import gspread
-import base64
 from oauth2client.service_account import ServiceAccountCredentials
+import base64
 
 def main():
     st.title("Train Problem Tracker")
@@ -104,11 +104,9 @@ def read_from_google_drive():
 def download_file(file_path, file_name):
     with open(file_path, "rb") as file:
         data = file.read()
-    base64_data = base64.b64encode(data).decode("utf-8")
-    st.markdown(
-        f'<a href="data:application/octet-stream;base64,{base64_data}" download="{file_name}">Download File</a>',
-        unsafe_allow_html=True
-    )
+    b64_data = base64.b64encode(data).decode("utf-8")
+    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_data}" download="{file_name}">Download File</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
