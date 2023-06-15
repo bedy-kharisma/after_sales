@@ -1,33 +1,12 @@
-import pandas as pd
 import streamlit as st
-from st_aggrid import AgGrid
-import openpyxl
 import pandas as pd
-import requests
-import joblib
-from io import BytesIO
-from github import Github
-import io
-import base64
-import pickle
-from github import Github, UnknownObjectException
-from google.oauth2 import service_account
-import pyparsing
 import gspread
-
-
-# Create a connection object.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive"
-    ],
-)
-client=gspread.authorize(credentials)
+from oauth2client.service_account import ServiceAccountCredentials
 
 def main():
     st.title("Train Problem Tracker")
     st.write("Enter the details of train problems")
+
     # Create empty dataframe to store the train problem data
     train_problems = pd.DataFrame(columns=[
         "Trainset", "Date problem's found", "Date problem's closed",
@@ -35,6 +14,7 @@ def main():
         "Cause Classification", "Problem Classification",
         "Component name", "Number of Component"
     ])
+
     # Create input fields for each column
     trainset = st.text_input("Trainset")
     found_date = st.date_input("Date problem's found")
@@ -46,6 +26,7 @@ def main():
     problem_classification = st.text_input("Problem Classification")
     component_name = st.text_input("Component name")
     num_component = st.number_input("Number of Component", min_value=0)
+
     # Create a button to submit the data
     if st.button("Add Train Problem"):
         # Append the input data as a new row to the dataframe
@@ -61,15 +42,32 @@ def main():
             "Component name": component_name,
             "Number of Component": num_component
         }, ignore_index=True)
+
         # Write the data to Google Drive
         write_to_google_drive(train_problems)
+
         st.success("Train problem added successfully!")
+
     # Display the train problem data table
     st.write(train_problems)
- #sheet_url = st.secrets["private_gsheets_url"]
- #               sheet=client.open("database").sheet1
- #               sheet.update([database_df.columns.values.tolist()]+database_df.values.tolist())
- #               st.info("Total rows :"+str(len(database_df)))       
+
+def write_to_google_drive(train_problems):
+    # Authenticate and create a connection to Google Drive
+    scope = ['https://spreadsheets.google.com/feeds',
+             'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+        'path/to/your/credentials.json', scope)
+    client = gspread.authorize(credentials)
+
+    # Open the Google Sheet
+    sheet = client.open("Train Problem Tracker").sheet1
+
+    # Clear existing data in the sheet
+    sheet.clear()
+
+    # Convert the dataframe to a list of lists and write to the sheet
+    data = train_problems.values.tolist()
+    sheet.append_rows(data)
 
 if __name__ == "__main__":
     main()
