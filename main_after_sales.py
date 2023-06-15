@@ -32,7 +32,7 @@ def main():
     if st.button("Masukkan Data Gangguan"):
         # Append the input data as a new row to the dataframe
         new_row = {
-            "Nama Proyek":nama_proyek,
+            "Nama Proyek": nama_proyek,
             "Trainset": trainset,
             "Tanggal problem ditemukan": found_date.strftime("%Y-%m-%d"),
             "Tanggal problem terselesaikan": closed_date.strftime("%Y-%m-%d"),
@@ -47,7 +47,7 @@ def main():
         train_problems = train_problems.append(new_row, ignore_index=True)
 
         # Write the data to Google Drive
-        write_to_google_drive(train_problems[1:])
+        write_to_google_drive(train_problems)
 
         st.success("Data Gangguan berhasil dimasukkan!")
 
@@ -72,11 +72,20 @@ def write_to_google_drive(train_problems):
     # Open the Google Sheet
     sheet = client.open("after_sales").sheet1
 
+    # Get the existing column names from the Google Sheet
+    existing_columns = sheet.row_values(1)
+
+    # Find the mismatched columns
+    mismatched_columns = set(train_problems.columns) - set(existing_columns)
+
+    # Filter out the rows with mismatched column names
+    train_problems = train_problems.drop(columns=mismatched_columns)
+
     # Convert the dataframe to a list of lists
-    data = [train_problems.columns.tolist()] + train_problems.values.tolist()
+    data = train_problems.values.tolist()
 
     # Append the data to the sheet
-    sheet.append_rows(data)
+    sheet.append_rows(data, value_input_option='USER_ENTERED', insert_data_option='INSERT_ROWS')
 
 
 def read_from_google_drive():
