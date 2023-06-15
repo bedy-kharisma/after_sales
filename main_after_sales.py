@@ -1,9 +1,8 @@
 import streamlit as st
 import pandas as pd
 import gspread
-import base64
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
+import base64
 
 def main():
     st.title("Train Problem Tracker")
@@ -62,9 +61,9 @@ def main():
     # Button to download data
     if st.button("Download Data"):
         data = read_from_google_drive()
-        csv = data.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64}" download="train_problems.csv">Download CSV</a>'
+        csv_data = data.to_csv(index=False)
+        b64_data = base64.b64encode(csv_data.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64_data}" download="train_problems.csv">Download CSV</a>'
         st.markdown(href, unsafe_allow_html=True)
 
 def write_to_google_drive(train_problems):
