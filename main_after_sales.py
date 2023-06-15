@@ -10,13 +10,14 @@ def main():
 
     # Create empty dataframe to store the train problem data
     train_problems = pd.DataFrame(columns=[
-        "Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
+        "Nama Proyek","Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
         "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
         "Klasifikasi Penyebab", "Klasifikasi Problem",
         "Nama Komponen", "Jumlah Komponen"
     ])
 
     # Create input fields for each column
+    nama_proyek = st.selectbox("Nama Proyek",("438","LRT JAbodebek", "KRDE BIM", "BIAS"))
     trainset = st.text_input("Trainset")
     found_date = st.date_input("Tanggal problem ditemukan")
     closed_date = st.date_input("Tanggal problem terselesaikan")
