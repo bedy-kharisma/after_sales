@@ -9,12 +9,12 @@ def main():
     st.write("Masukkan data gangguan kereta")
 
     # Create empty dataframe to store the train problem data
-    #train_problems = pd.DataFrame(columns=[
-    #    "Nama Proyek","Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
-    #    "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
-    #    "Klasifikasi Penyebab", "Klasifikasi Problem",
-    #    "Nama Komponen", "Jumlah Komponen"
-    #])
+    train_problems = pd.DataFrame(columns=[
+        "Nama Proyek","Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
+        "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
+        "Klasifikasi Penyebab", "Klasifikasi Problem",
+        "Nama Komponen", "Jumlah Komponen"
+    ])
 
     # Create input fields for each column
     nama_proyek = st.selectbox("Nama Proyek",("438","LRT JAbodebek", "KRDE BIM", "BIAS"))
@@ -75,11 +75,24 @@ def write_to_google_drive(train_problems):
     # Open the Google Sheet
     sheet = client.open("after_sales").sheet1
 
+    # Get the existing column names from the Google Sheet
+    existing_columns = sheet.row_values(1)
+
+    # Find the indices of the rows to be deleted
+    indices_to_delete = []
+    for i, column in enumerate(train_problems.columns):
+        if column in existing_columns:
+            indices_to_delete.append(i)
+
+    # Delete the rows with matching column names
+    train_problems = train_problems.drop(indices_to_delete)
+
     # Convert the dataframe to a list of lists
     data = [train_problems.columns.tolist()] + train_problems.values.tolist()
 
     # Append the data to the sheet
     sheet.append_rows(data)
+
 
 def read_from_google_drive():
     # Authenticate and create a connection to Google Drive
