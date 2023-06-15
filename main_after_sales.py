@@ -53,6 +53,19 @@ def main():
     # Display the train problem data table
     st.write(train_problems)
 
+    # Button to show all data
+    if st.button("Show All Data"):
+        data = read_from_google_drive()
+        st.write(data)
+
+    # Button to download data
+    if st.button("Download Data"):
+        data = read_from_google_drive()
+        csv = data.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64}" download="train_problems.csv">Download CSV</a>'
+        st.markdown(href, unsafe_allow_html=True)
+
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
     scope = ['https://spreadsheets.google.com/feeds',
@@ -69,6 +82,25 @@ def write_to_google_drive(train_problems):
 
     # Append the data to the existing values in the sheet
     sheet.append_rows(data, value_input_option="USER_ENTERED")
+
+def read_from_google_drive():
+    # Authenticate and create a connection to Google Drive
+    scope = ['https://spreadsheets.google.com/feeds',
+             'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        st.secrets["gcp_service_account"], scope)
+    client = gspread.authorize(credentials)
+
+    # Open the Google Sheet
+    sheet = client.open("after_sales").sheet1
+
+    # Read all values from the sheet
+    values = sheet.get_all_values()
+
+    # Convert the values to a DataFrame
+    data = pd.DataFrame(values[1:], columns=values[0])
+
+    return data
 
 if __name__ == "__main__":
     main()
