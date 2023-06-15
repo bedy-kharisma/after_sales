@@ -63,7 +63,7 @@ def main():
         data = read_from_google_drive()
         file_path = "train_problems.xlsx"
         data.to_excel(file_path, index=False)
-        download_file(file_path)
+        download_file(file_path, "train_problems.xlsx")
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
@@ -101,11 +101,10 @@ def read_from_google_drive():
 
     return data
 
-def download_file(file_path):
+def download_file(file_path, file_name):
     with open(file_path, "rb") as file:
         data = file.read()
     base64_data = base64.b64encode(data).decode("utf-8")
-    file_name = file_path.split("/")[-1]
     st.markdown(
         f'<a href="data:application/octet-stream;base64,{base64_data}" download="{file_name}">Download File</a>',
         unsafe_allow_html=True
