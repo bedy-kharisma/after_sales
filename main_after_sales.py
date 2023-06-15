@@ -57,13 +57,12 @@ def main():
     if st.button("Show All Data"):
         data = read_from_google_drive()
         st.write(data)
-        
+
     # Button to download data
     if st.button("Download Data"):
         data = read_from_google_drive()
-        file_path = "train_problems.xlsx"
         data.to_excel(file_path, index=False)
-        download_file(file_path)
+        file_name = "train_problems.xlsx"      
 
 def write_to_google_drive(train_problems):
     # Authenticate and create a connection to Google Drive
