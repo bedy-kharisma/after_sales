@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 import gspread
-import base64
 from oauth2client.service_account import ServiceAccountCredentials
+import base64
+import io
 
 def main():
     st.title("Train Problem Tracker")
@@ -87,29 +88,4 @@ def read_from_google_drive():
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-        st.secrets["gcp_service_account"], scope)
-    client = gspread.authorize(credentials)
-
-    # Open the Google Sheet
-    sheet = client.open("after_sales").sheet1
-
-    # Read all values from the sheet
-    values = sheet.get_all_values()
-
-    # Convert the values to a DataFrame
-    data = pd.DataFrame(values[1:], columns=values[0])
-
-    return data
-
-def download_file(file_path):
-    with open(file_path, "rb") as file:
-        data = file.read()
-    base64_data = base64.b64encode(data).decode("utf-8")
-    file_name = file_path.split("/")[-1]
-    st.markdown(
-        f'<a href="data:application/octet-stream;base64,{base64_data}" download="{file_name}">Download File</a>',
-        unsafe_allow_html=True
-    )
-
-if __name__ == "__main__":
-    main()
+       
