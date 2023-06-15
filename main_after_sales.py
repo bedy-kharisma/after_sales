@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import base64
 
 def main():
     st.title("AFTER SALES PT INKA")
@@ -78,14 +77,8 @@ def write_to_google_drive(train_problems):
     # Get the existing column names from the Google Sheet
     existing_columns = sheet.row_values(1)
 
-    # Find the indices of the rows to be deleted
-    indices_to_delete = []
-    for i, column in enumerate(train_problems.columns):
-        if column in existing_columns:
-            indices_to_delete.append(i)
-
-    # Delete the rows with matching column names
-    train_problems = train_problems.drop(indices_to_delete)
+    # Filter out the rows with matching column names
+    train_problems = train_problems[~train_problems.columns.isin(existing_columns)]
 
     # Convert the dataframe to a list of lists
     data = [train_problems.columns.tolist()] + train_problems.values.tolist()
