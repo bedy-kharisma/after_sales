@@ -31,7 +31,7 @@ def main():
     # Create a button to submit the data
     if st.button("Add Train Problem"):
         # Append the input data as a new row to the dataframe
-        train_problems = train_problems.append({
+        new_row = {
             "Trainset": trainset,
             "Date problem's found": found_date.strftime("%Y-%m-%d"),
             "Date problem's closed": closed_date.strftime("%Y-%m-%d"),
@@ -42,7 +42,8 @@ def main():
             "Problem Classification": problem_classification,
             "Component name": component_name,
             "Number of Component": num_component
-        }, ignore_index=True)
+        }
+        train_problems = train_problems.append(new_row, ignore_index=True)
 
         # Write the data to Google Drive
         write_to_google_drive(train_problems)
@@ -63,18 +64,11 @@ def write_to_google_drive(train_problems):
     # Open the Google Sheet
     sheet = client.open("after_sales").sheet1
 
-    # Clear existing data in the sheet
-    sheet.clear()
+    # Convert the dataframe to a list of lists
+    data = [train_problems.columns.tolist()] + train_problems.values.tolist()
 
-    # Get the column names
-    column_names = train_problems.columns.tolist()
-
-    # Insert the column names as the first row
-    sheet.insert_row(column_names, index=1)
-
-    # Convert the dataframe to a list of lists and write to the sheet
-    data = train_problems.values.tolist()
-    sheet.append_rows(data)
+    # Append the data to the existing values in the sheet
+    sheet.append_rows(data, value_input_option="USER_ENTERED")
 
 if __name__ == "__main__":
     main()
