@@ -9,12 +9,12 @@ def main():
     st.write("Masukkan data gangguan kereta")
 
     # Create empty dataframe to store the train problem data
-    train_problems = pd.DataFrame(columns=[
-        "Nama Proyek","Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
-        "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
-        "Klasifikasi Penyebab", "Klasifikasi Problem",
-        "Nama Komponen", "Jumlah Komponen"
-    ])
+    #train_problems = pd.DataFrame(columns=[
+    #    "Nama Proyek","Trainset", "Tanggal problem ditemukan", "Tanggal problem terselesaikan",
+    #    "Nomor Kereta", "Deskripsi Problem", "Solusi Problem",
+    #    "Klasifikasi Penyebab", "Klasifikasi Problem",
+    #    "Nama Komponen", "Jumlah Komponen"
+    #])
 
     # Create input fields for each column
     nama_proyek = st.selectbox("Nama Proyek",("438","LRT JAbodebek", "KRDE BIM", "BIAS"))
